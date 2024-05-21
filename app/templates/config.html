@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'general/css/config.css' %}">
+{% endblock %}
+
+{% block 'dashboard' %}
+<div class="container">
+    <div class="row">
+        <div onclick="exibir_form('1')" class="col-md card-dashboard">
+            <p class="text-card">Adicionar venda</p>
+        </div> 
+
+        <div onclick="exibir_form('2')" class="col-md card-dashboard">
+            <p class="text-card">Produto</p>
+        </div> 
+
+    </div>
+
+        <div id="adicionar-cliente" class="adicionar-cliente">
+            <form action="{% url 'config' %}" method="POST">{% csrf_token %}
+                <div class="row">
+                    <div class="col-md">
+                        <p>Data da venda:</p>
+                        <input type="datetime" class="form-control" placeholder="dd/mm/aaaa" name="data" value="{{data}}">
+                    </div>
+                    <div class="col-md">
+                        <p>Produto:</p>
+                        <input type="text" class="form-control" placeholder="Produto" name="produto" value="{{produto}}">
+                    </div>
+                </div>
+                <br>
+                <p>Tamanho:</p>
+                <input type="text" class="form-control" placeholder="P=pequeno, M=Média, G=Grande" name="tamanho" value="{{tamanho}}">
+                <br>
+                <hr style="background-color:gray;">
+                <div class="add-prod">
+                    <h3>Comanda</h3>
+                    <span class="btn-add-prod" onclick="add_prod()">+ Adicionar produto</span>
+                    #TODO: remover Produto
+                    <div id="form-prod">
+                        {% for produto, tamanho, quantidade in venda%}
+                                <br>
+                                <div class="row">
+                                    <div class="col-md">
+                                        <input type='text' placeholder='Produto' class='form-control' name='produto' value="{{produto}}">
+                                    </div>
+
+                                    <div class="col-md">
+                                        <input type='text' placeholder='Tamanho' class='form-control' name='tamanho' value="{{tamanho}}">
+                                    </div>
+
+                                    <div class="col-md">
+                                        <input type='number' placeholder='Quantidade' class='form-control' name='quantidade' value="{{quantidade}}">
+                                    </div>
+
+                                </div>
+                        {% endfor%}
+                    </div>
+
+                </div>
+
+                <br>
+                <input type="submit" value="Cadastrar" class="btn-principal">
+
+            </form>
+    
+        </div>
+
+
+        <div id="att_cliente">
+            <p></p>
+            <select id="cliente-select"  onchange="dados_cliente()" class="form-control">
+                {% for cliente in clientes %}
+                <option value="{{cliente.id}}">{{cliente.nome}}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <hr>
+
+            <div id="form-att-cliente">
+                <input type="hidden" id="id">
+                <p>Nome:</p>
+                <input id="nome" type="text" class='form-control'>
+                <p>Sobrenome:</p>
+                <input id="sobrenome" type="text" class='form-control'>
+                <p>E-mail:</p>
+                <input id="email" type="text" class='form-control'>
+                <p>CPF:</p>
+                <input id="cpf" type="text" class='form-control'>
+                <br>
+                <input onclick="update_cliente()"  type="submit" value="salvar" class="btn btn-success" > 
+                <hr style="background-color: gray;">
+                <h2>Carros</h2>
+                <div id="carros">
+                    
+                </div>
+            </div>
+            
+        </div>
+
+</div>
+<script src="{% static 'general/js/config.js' %}"></script>
+{% endblock%}
